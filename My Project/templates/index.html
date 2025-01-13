@@ -1,0 +1,116 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polynomial Intersection Finder</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        window.backgrounds = [
+            "{{ url_for('static', filename='background1.jpg') }}",
+            "{{ url_for('static', filename='background2.jpg') }}",
+            "{{ url_for('static', filename='background3.jpg') }}"
+        ];
+        
+        // Function to validate the input fields
+        function validateInputs() {
+            // Get input values
+            const a1 = document.getElementById('a1').value;
+            const b1 = document.getElementById('b1').value;
+            const c1 = document.getElementById('c1').value;
+            const a2 = document.getElementById('a2').value;
+            const b2 = document.getElementById('b2').value;
+            const c2 = document.getElementById('c2').value;
+
+            // Regular expression to match numeric values
+            const numericPattern = /^-?\d+(\.\d+)?$/;
+
+            // Check if inputs are numeric
+            if (!numericPattern.test(a1) || !numericPattern.test(b1) || !numericPattern.test(c1) || !numericPattern.test(a2) || !numericPattern.test(b2) || !numericPattern.test(c2)) {
+                document.getElementById('warning-message').innerText = 'Please enter valid numeric values.';
+                return false; // Prevent form submission
+            }
+            return true; // Allow form submission
+        }
+    </script>
+</head>
+<body>
+    <div class="background" id="background"></div>
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Input Form -->
+            <div class="col-md-6">
+                <h3>Enter Polynomial Coefficients</h3>
+                <form method="POST" action="/intersection" onsubmit="return validateInputs()">
+                    <div class="form-row">
+                        <div class="col-md-4 mb-3">
+                            <input type="text" name="a1" id="a1" class="form-control" placeholder="a1 (x^2)" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <input type="text" name="b1" id="b1" class="form-control" placeholder="b1 (x)" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <input type="text" name="c1" id="c1" class="form-control" placeholder="c1 (constant)" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-4 mb-3">
+                            <input type="text" name="a2" id="a2" class="form-control" placeholder="a2 (x^2)" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <input type="text" name="b2" id="b2" class="form-control" placeholder="b2 (x)" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <input type="text" name="c2" id="c2" class="form-control" placeholder="c2 (constant)" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="folder_name" class="form-control" placeholder="Folder Name" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Generate Graph</button>
+                </form>
+                <!-- Warning Message -->
+                <div id="warning-message" style="color: red; margin-top: 10px;"></div>
+            </div>
+
+            <!-- Graph Display -->
+            <div class="col-md-6">
+                <h3>Generated Graph</h3>
+                {% if graph_path %}
+                    <img src="{{ graph_path }}" alt="Graph" class="img-fluid">
+                {% else %}
+                    <p>No graph generated yet.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Solution/Step-by-Step Explanation -->
+        <div class="mt-5">
+            <h3>Solution/Steps:</h3>
+            {% if explanation %}
+                <ol>
+                    {% for step in explanation %}
+                        <li>{{ step }}</li>
+                    {% endfor %}
+                </ol>
+            {% else %}
+                <p>No solution generated yet.</p>
+            {% endif %}
+        </div>
+
+        <!-- History of Graphs -->
+        <div class="mt-5">
+            <h3>History of Graphs</h3>
+            <ul>
+                {% for graph in graph_history %}
+                    <li><a href="{{ url_for('static', filename=folder_name + '/' + graph.strip()) }}" target="_blank">{{ graph.strip() }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- JavaScript for Changing Backgrounds -->
+    <script src="{{ url_for('static', filename='background.js') }}"></script>
+</body>
+</html>

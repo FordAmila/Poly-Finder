@@ -1,0 +1,154 @@
+﻿/* General Background Styling */
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    transition: opacity 1s ease-in-out;
+    background-size: cover;
+    background-position: center;
+    filter: blur(5px); /* Apply blur effect */
+    background-image: url('/static/background1.jpg'); /* Hardcoded path for debugging */
+}
+
+
+/* General Body Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: rgba(244, 244, 244, 0.9); /* Light grey with transparency to allow blurred background */
+    margin: 0;
+    padding: 0;
+    color: #333; /* Default text color */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full screen height */
+    text-align: center; /* Center text horizontally */
+}
+
+/* Header and Text Styling */
+h1, h3 {
+    color: #2c3e50; /* Dark blue-grey color for headers */
+    font-weight: bold; /* Bold font for headers */
+    margin-bottom: 15px;
+}
+
+p {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    font-weight: normal; /* Normal font for paragraph */
+}
+
+/* Container and Layout */
+.container {
+    max-width: 1200px;
+    width: 80%;
+    padding: 20px;
+    margin-top: 50px; /* Space from the top */
+    background-color: rgba(255, 255, 255, 0.8); /* Light background with transparency */
+    border-radius: 12px; /* Round corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Input Form Styling */
+form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px; /* Round borders */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd; /* Adding border */
+}
+
+input[type="text"] {
+    border: 1px solid #ddd;
+    border-radius: 8px; /* Round corners for inputs */
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 1rem;
+    width: 100%;
+}
+
+button {
+    font-size: 1.1rem;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px; /* Round corners for button */
+    background-color: #3498db;
+    color: white;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+/* Graph Image Styling */
+img {
+    max-width: 100%;
+    height: auto;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+}
+
+/* Solution Text */
+ol {
+    padding-left: 20px;
+}
+
+ol li {
+    margin-bottom: 10px;
+}
+
+/* Layout for Input Form and Graph */
+.row {
+    margin-bottom: 30px;
+}
+
+.col-md-6 {
+    padding: 15px;
+}
+
+/* Add border and background to section titles */
+h3 {
+    background-color: #ecf0f1;
+    padding: 10px;
+    border-radius: 8px; /* Round borders */
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+}
+
+/* Solution Section Styling */
+.mt-5 {
+    margin-top: 30px;
+}
+
+.mt-5 h3 {
+    background-color: #ecf0f1;
+    padding: 10px;
+    border-radius: 8px; /* Round borders */
+    border: 1px solid #ddd;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .col-md-6 {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .container {
+        padding: 10px;
+    }
+}
+
+/* Footer Text (Optional) */
+footer {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 1rem;
+    color: #7f8c8d;
+}

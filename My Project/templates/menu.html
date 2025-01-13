@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Menu</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Background Div with Blur Effect -->
+    <div class="background" id="background"></div>
+
+    <!-- Content Section -->
+    <div class="container mt-5 text-center" style="position: relative; z-index: 1;">
+        <h1>Welcome to Polynomial Finder</h1>
+        <p>Select an option below:</p>
+        <a href="{{ url_for('intersection') }}" class="btn btn-primary">Find Polynomial Intersections</a>
+        <a href="{{ url_for('quadratic_info') }}" class="btn btn-secondary">Learn About Quadratic Equations</a>
+    </div>
+
+    <!-- JavaScript for Changing Backgrounds -->
+    <script>
+        const backgrounds = [
+            "{{ url_for('static', filename='background1.jpg') }}",
+            "{{ url_for('static', filename='background2.jpg') }}",
+            "{{ url_for('static', filename='background3.jpg') }}"
+        ];
+
+        let currentIndex = 0;
+
+        function changeBackground() {
+            const bg = document.getElementById('background');
+            bg.style.opacity = 0; // Fade out
+            setTimeout(() => {
+                bg.style.backgroundImage = `url(${backgrounds[currentIndex]})`;
+                bg.style.opacity = 1; // Fade in
+                currentIndex = (currentIndex + 1) % backgrounds.length;
+            }, 1000); // Wait 1 second before switching
+        }
+
+        setInterval(changeBackground, 5000); // Change background every 5 seconds
+        changeBackground(); // Set initial background
+    </script>
+</body>
+</html>

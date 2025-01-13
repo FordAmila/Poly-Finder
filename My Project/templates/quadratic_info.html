@@ -1,0 +1,180 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding Quadratic Equations</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        window.backgrounds = [
+            "{{ url_for('static', filename='background1.jpg') }}",
+            "{{ url_for('static', filename='background2.jpg') }}",
+            "{{ url_for('static', filename='background3.jpg') }}"
+        ];
+
+        // Function to validate the input fields
+        function validateInputs() {
+            const a = document.getElementById('a').value;
+            const b = document.getElementById('b').value;
+            const c = document.getElementById('c').value;
+            const folderName = document.getElementById('folder_name').value;
+
+            const numericPattern = /^-?\d+(\.\d+)?$/;
+
+            if (!numericPattern.test(a) || !numericPattern.test(b) || !numericPattern.test(c)) {
+                document.getElementById('warning-message').innerText = 'Please enter valid numeric values.';
+                return false; 
+            }
+
+            if (!folderName.trim()) {
+                document.getElementById('warning-message').innerText = 'Please enter a valid folder name.';
+                return false;
+            }
+
+            return true; 
+        }
+
+        document.addEventListener('DOMContentLoaded', updateGraph);
+
+        function updateGraph() {
+            const a = parseFloat(document.querySelector('input[name="a"]').value || 0);
+            const b = parseFloat(document.querySelector('input[name="b"]').value || 0);
+            const c = parseFloat(document.querySelector('input[name="c"]').value || 0);
+            const canvas = document.getElementById('quadratic-graph');
+            const ctx = canvas.getContext('2d');
+
+            // Define the x-axis range
+            const xRange = 10;
+
+            // Calculate y-values for the given x-range
+            const yValues = [];
+            for (let x = -xRange; x <= xRange; x += 0.1) {
+                yValues.push(a * Math.pow(x, 2) + b * x + c);
+            }
+            const yMin = Math.min(...yValues);
+            const yMax = Math.max(...yValues);
+            const yRange = Math.max(Math.abs(yMin), Math.abs(yMax));
+
+            // Adjust canvas size and scales
+            canvas.width = canvas.clientWidth;
+            canvas.height = canvas.clientHeight;
+
+            const xScale = canvas.width / (2 * xRange);
+            const yScale = yRange > 0 ? canvas.height / (2 * yRange) : canvas.height / 10;
+            const midX = canvas.width / 2;
+            const midY = canvas.height / 2;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);  // Clear canvas
+
+            // Draw x-axis and y-axis
+            ctx.beginPath();
+            ctx.moveTo(0, midY);
+            ctx.lineTo(canvas.width, midY);
+            ctx.moveTo(midX, 0);
+            ctx.lineTo(midX, canvas.height);
+            ctx.strokeStyle = '#000000';  // Axis color
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            // Draw x-axis and y-axis labels
+            ctx.font = '12px Arial';
+            ctx.fillStyle = '#000000';
+            for (let i = -xRange; i <= xRange; i++) {
+                const x = midX + i * xScale;
+                ctx.fillText(i, x, midY + 15);  // X-axis labels
+            }
+            for (let i = -yRange; i <= yRange; i += Math.max(1, Math.round(yRange / 10))) {
+                const y = midY - i * yScale;
+                ctx.fillText(i, midX + 5, y);  // Y-axis labels
+            }
+
+            // Draw the quadratic curve
+            ctx.beginPath();
+            for (let x = -xRange; x <= xRange; x += 0.1) {
+                const y = a * Math.pow(x, 2) + b * x + c;
+                const canvasX = midX + x * xScale;
+                const canvasY = midY - y * yScale;
+                if (x === -xRange) {
+                    ctx.moveTo(canvasX, canvasY);
+                } else {
+                    ctx.lineTo(canvasX, canvasY);
+                }
+            }
+            ctx.strokeStyle = '#FF0000';  // Curve color
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+    </script>
+</head>
+<body>
+    <!-- Background Div with Blur Effect -->
+    <div class="background" id="background"></div>
+
+    <!-- Content Section -->
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <!-- Info Section with Image -->
+            <div class="col-lg-5 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-primary text-white">
+                        <h3>Quadratic Equations</h3>
+                    </div>
+                    <div class="card-body text-left">
+                        <p class="text-justify">A quadratic equation is of the form: <strong>ax² + bx + c = 0</strong></p>
+                        <p class="text-justify">Key features:</p>
+                        <ul>
+                            <li>Parabola shape</li>
+                            <li>Vertex: the highest or lowest point</li>
+                            <li>Axis of symmetry: a vertical line through the vertex</li>
+                            <li>Roots: where the equation equals zero</li>
+                        </ul>
+                        <p class="text-justify">Quadratic Formula: <strong>x = [-b ± sqrt(b² - 4ac)] / (2a)</strong></p>
+                        <div class="text-center">
+                            <img src="{{ url_for('static', filename='Quadratic_formula.jpg') }}" alt="Quadratic Formula" class="img-fluid mt-3" style="max-width: 70%;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Coefficient Input -->
+            <div class="col-lg-7 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-secondary text-white">
+                        <h3>Interactive Example</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="quadratic-form" method="POST" action="/quadratic_info" onsubmit="return validateInputs()">
+                            <div class="form-group">
+                                <label for="a">Coefficient a:</label>
+                                <input type="text" name="a" id="a" class="form-control" placeholder="Enter a number" oninput="updateGraph()">
+                            </div>
+                            <div class="form-group">
+                                <label for="b">Coefficient b:</label>
+                                <input type="text" name="b" id="b" class="form-control" placeholder="Enter a number" oninput="updateGraph()">
+                            </div>
+                            <div class="form-group">
+                                <label for="c">Coefficient c:</label>
+                                <input type="text" name="c" id="c" class="form-control" placeholder="Enter a number" oninput="updateGraph()">
+                            </div>
+                            <div class="form-group">
+                                <label for="folder_name">Folder Name:</label>
+                                <input type="text" name="folder_name" id="folder_name" class="form-control" placeholder="Enter folder name" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Graph</button>
+                            <!-- Warning Message -->
+                            <div id="warning-message" style="color: red; margin-top: 10px;"></div>
+                        </form>
+                        <div class="canvas-container">
+                            <canvas id="quadratic-graph" style="width: 100%; height: 300px;"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for Changing Backgrounds -->
+    <script src="{{ url_for('static', filename='background.js') }}"></script>
+</body>
+</html>
